@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"rfmtransportes-api/services/auth"
+	"rfmtransportes-api/services/stops"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/joho/godotenv"
@@ -15,7 +16,8 @@ func main() {
 	}
 	app := fiber.New()
 
-	auth.AuthControllerHook(app)
+	auth.ControllerHook(app)
+	stops.ControllerHook(app)
 
 	log.Fatal(app.Listen(":3000"))
 }

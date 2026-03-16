@@ -1,12 +1,12 @@
 package auth
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -48,16 +48,12 @@ func (s *service) Login() (*AuthResponse, error) {
 		return nil, fmt.Errorf("Erro ao ler o corpo da resposta.")
 	}
 
-	fmt.Println("Status:", resp.Status)
-	fmt.Println("Response:", string(body))
-
-	var response AuthResponse
-	err = json.Unmarshal(body, &response)
-	if err != nil {
-		return nil, fmt.Errorf("Erro ao converter a resposta para JSON %v", string(body))
+	token := strings.Trim(string(body), "\"")
+	if token == "" {
+		return nil, fmt.Errorf("Token vazio na resposta")
 	}
 
-	return &response, nil
+	return &AuthResponse{Token: token}, nil
 }
 
 func NewAuthService() IService {
